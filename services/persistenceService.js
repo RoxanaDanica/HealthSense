@@ -11,7 +11,7 @@ async function connectDB() {
         await client.connect();
         console.log("Successfully connected to Atlas");
 
-        const db = client.db('sample_restaurants');
+        const db = client.db('HealthSense');
         currentDB = db;
     } catch (err) {
         console.log(err.stack);

@@ -3,6 +3,8 @@ const express = require('express');
 function startServer() {
     const app = express();
     const port = 8000;
+    
+    app.use(require('body-parser').json());
 
     // Require all the routes
     const pacientiRoutes = require('./pacienti');
