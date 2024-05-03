@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const { retrievePacienti, insertPacienti,addNewPatient, updatePatient, deletePatient, retrievePatient } = require('../services/pacientiService');
-const { data } = require('jquery');
+const { 
+  retrievePacienti,
+  insertPacienti,
+  addNewPatient,
+  updatePatient,
+  deletePatient,
+  retrievePatient,
+} = require('../services/pacientiService');
+
+const { validatePatientData, validateUpdatePatient } = require('./utils/pacientsUtils');
 
 // router.get('/save', async (req, res) => {
 //   const pacienti = await insertPacienti();
@@ -18,14 +26,30 @@ router.get('/pacienti', async (req, res) => {
   });
 });
 
-router.post('/pacienti', async (req, res) => {
+// Creates a patient
+router.post('/pacient', async (req, res) => {
   const newPatient = req.body;
+
+  try {
+    validatePatientData(newPatient)
+  } catch(error) {
+    res.status(400).json({ message: error.message });
+    return;
+  }
+
   const result = await addNewPatient(newPatient);
   res.status(201).json({ message: 'Patient added successfully', patient: result });
 });
 
-router.put('/pacienti', async (req, res) => {
+router.put('/pacient', async (req, res) => {
   const idPatient = req.body._id;
+  try {
+    validateUpdatePatient(req.body)
+  } catch(error) {
+    res.status(400).json({ message: error.message });
+    return;
+  }
+
   console.log(req.body);
   const myObject = req.body;
   delete myObject._id; 
